@@ -211,6 +211,9 @@ END
 GO
 
 /* One procedure to run the whole pipeline with logging */
+USE PortfolioETL;
+GO
+
 CREATE OR ALTER PROCEDURE etl.usp_Run_Pipeline
 AS
 BEGIN
@@ -219,15 +222,18 @@ BEGIN
     DECLARE @pipelineRunId bigint = NULL;
     DECLARE @stepRunId     bigint = NULL;
 
+    DECLARE @rowsStg int = NULL;
+    DECLARE @rowsDw  int = NULL;
+
     BEGIN TRY
-        -- Pipeline header row (this is the one we will update to SUCCESS/FAILED)
+        -- Pipeline header
         EXEC etl.usp_LogStep
             @PipelineName='ETL Portfolio Pipeline',
             @StepName='Pipeline',
             @Status='STARTED',
             @ETLRunId=@pipelineRunId OUTPUT;
 
-        -- Step: Load Staging
+        -- Load Staging
         EXEC etl.usp_LogStep
             @PipelineName='ETL Portfolio Pipeline',
             @StepName='Load Staging',
@@ -236,13 +242,19 @@ BEGIN
 
         EXEC etl.usp_Load_Staging;
 
+        SELECT @rowsStg =
+            (SELECT COUNT(*) FROM stg.Customers) +
+            (SELECT COUNT(*) FROM stg.Products) +
+            (SELECT COUNT(*) FROM stg.Orders);
+
         EXEC etl.usp_LogStep
             @PipelineName='ETL Portfolio Pipeline',
             @StepName='Load Staging',
             @Status='SUCCESS',
+            @RowsAffected=@rowsStg,
             @ETLRunId=@stepRunId OUTPUT;
 
-        -- Step: Load Warehouse
+        -- Load Warehouse
         EXEC etl.usp_LogStep
             @PipelineName='ETL Portfolio Pipeline',
             @StepName='Load Warehouse',
@@ -251,13 +263,19 @@ BEGIN
 
         EXEC etl.usp_Load_Warehouse;
 
+        SELECT @rowsDw =
+            (SELECT COUNT(*) FROM dw.DimCustomer) +
+            (SELECT COUNT(*) FROM dw.DimProduct) +
+            (SELECT COUNT(*) FROM dw.FactSales);
+
         EXEC etl.usp_LogStep
             @PipelineName='ETL Portfolio Pipeline',
             @StepName='Load Warehouse',
             @Status='SUCCESS',
+            @RowsAffected=@rowsDw,
             @ETLRunId=@stepRunId OUTPUT;
 
-        -- Update pipeline header to SUCCESS
+        -- Pipeline SUCCESS
         EXEC etl.usp_LogStep
             @PipelineName='ETL Portfolio Pipeline',
             @StepName='Pipeline',
@@ -268,7 +286,6 @@ BEGIN
         DECLARE @msg nvarchar(2048) = ERROR_MESSAGE();
         DECLARE @msg_varchar varchar(4000) = LEFT(CONVERT(varchar(4000), @msg), 4000);
 
-        -- Update pipeline header to FAILED
         EXEC etl.usp_LogStep
             @PipelineName='ETL Portfolio Pipeline',
             @StepName='Pipeline',
