@@ -62,3 +62,28 @@ After execution:
 Screenshots are available in:
 
     screenshots/ssis/
+
+
+CSV Files
+   |
+   v
++--------+
+|  raw   |  <-- BULK INSERT / SSIS
++--------+
+     |
+     v
++--------+
+|  stg   |  (typed + cleaned)
++--------+
+     |
+     v
++------------------+
+| etl.usp_Run_Pipeline |
++------------------+
+     |
+     v
++--------+
+|  dw    | --> FactSales
++--------+     DimCustomer
+               DimProduct
+               DimDate

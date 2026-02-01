@@ -101,3 +101,25 @@ Both feed the same warehouse pipeline.
 ---
 
 See screenshots/ for proof of execution.
+
+
+flowchart LR
+    A[CSV Files] --> B[raw Schema]
+    B --> C[stg Schema]
+    C --> D[dw Star Schema]
+
+    subgraph Execution
+        E[T-SQL BULK INSERT]
+        F[SSIS Package]
+    end
+
+    E --> B
+    F --> B
+
+    D --> G[FactSales]
+    D --> H[DimCustomer]
+    D --> I[DimProduct]
+    D --> J[DimDate]
+
+    C --> K[etl.usp_Run_Pipeline]
+    K --> D
