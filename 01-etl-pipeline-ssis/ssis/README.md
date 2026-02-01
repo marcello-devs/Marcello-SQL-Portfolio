@@ -1,27 +1,64 @@
-﻿# ETL Pipeline (CSV → Raw → Staging → Warehouse)
+﻿# SSIS Package - Portfolio ETL
 
-This project demonstrates a simple end-to-end ETL pipeline using SQL Server.
+This folder contains the SSIS solution used to orchestrate CSV ingestion and execute the SQL ETL pipeline.
 
-## Architecture
-**CSV files** → `raw` (landing) → `stg` (typed/cleaned) → `dw` (star schema)  
-Logging is captured in `etl.ETLRunLog`.
+SSIS is responsible only for:
 
-## What it shows
-- Raw landing tables (text-first ingestion)
-- Typed staging tables with data cleansing (`TRY_CONVERT`, trimming, null-handling)
-- Dimensional model (star schema): `DimCustomer`, `DimProduct`, `DimDate`, `FactSales`
-- Incremental loads via `MERGE` (upsert pattern)
-- Pipeline logging (started/success/failed + row counts)
+- Truncating raw tables
+- Loading CSV files into raw.*
+- Executing etl.usp_Run_Pipeline
 
-## How to run
-1. Run scripts in order from `sql/`:
-   - `01_create_db_and_schemas.sql`
-   - `02_create_raw_tables.sql`
-   - `03_create_staging_tables.sql`
-   - `04_create_dw_tables.sql`
-   - `05_create_etl_logging.sql`
-   - `06_etl_procedures.sql`
-   - `07_bulk_load_raw.sql`
-2. Execute the pipeline:
-   ```sql
-   EXEC etl.usp_Run_Pipeline;
+All transformations occur inside SQL Server.
+
+---
+
+## Control Flow
+
+1. Execute SQL Task - Truncate raw tables
+2. Data Flow - Customers CSV → raw.Customers
+3. Data Flow - Products CSV → raw.Products
+4. Data Flow - Orders CSV → raw.Orders
+5. Execute SQL Task - Run etl.usp_Run_Pipeline
+
+Each CSV is loaded in its own Data Flow task.
+
+---
+
+## Prerequisites
+
+- SQL Server running locally (localhost)
+- PortfolioETL database created
+- CSV files present in:
+
+    01-etl-pipeline-ssis/data/
+
+Files:
+
+- customers.csv
+- products.csv
+- orders.csv
+
+---
+
+## How to Run
+
+1. Open the solution in:
+
+    ssis/PortfolioETL-SSIS/
+
+2. Press Start in Visual Studio.
+
+---
+
+## Verify
+
+After execution:
+
+    SELECT TOP 10 * FROM etl.ETLRunLog ORDER BY ETLRunId DESC;
+    SELECT COUNT(*) FROM dw.FactSales;
+
+---
+
+Screenshots are available in:
+
+    screenshots/ssis/
