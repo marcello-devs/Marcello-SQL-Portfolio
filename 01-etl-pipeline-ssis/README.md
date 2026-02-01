@@ -127,3 +127,21 @@ flowchart LR
     C --> K[etl.usp_Run_Pipeline]
     K --> D
 ```
+
+## Lessons Learned
+
+- SQLCMD `:r` includes are sensitive to execution context; absolute paths provide the most reliable setup for one-click environments.
+- BULK INSERT requires explicit data typing and consistent CSV formats to avoid conversion failures.
+- On modern Windows/SQL Server versions, ADO.NET destinations are more stable than legacy OLE DB providers in SSIS.
+- Separating raw ingestion from typed staging greatly simplifies error handling and data validation.
+- Centralizing transformations in stored procedures enables both T-SQL and SSIS to feed the same warehouse logic.
+- Using `MERGE` supports clean incremental loading for dimension and fact tables.
+- Step-level ETL logging is critical for operational visibility and debugging.
+
+## Future Improvements
+
+- Add automated data quality checks (row counts, null thresholds).
+- Parameterize file paths for environment portability.
+- Introduce scheduling (SQL Agent / Azure Data Factory).
+- Add Slowly Changing Dimensions (SCD Type 2).
+- Expand logging with execution duration metrics.
