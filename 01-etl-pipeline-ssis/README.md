@@ -102,6 +102,7 @@ Both feed the same warehouse pipeline.
 
 See screenshots/ for proof of execution.
 
+```mermaid
 
 flowchart LR
     A[CSV Files] --> B[raw Schema]
@@ -123,3 +124,4 @@ flowchart LR
 
     C --> K[etl.usp_Run_Pipeline]
     K --> D
+```
