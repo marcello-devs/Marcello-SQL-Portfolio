@@ -65,6 +65,7 @@ Screenshots are available in:
 
 ### Simplified Pipeline View
 
+```text
 CSV Files
    |
    v
@@ -92,3 +93,4 @@ FactSales
 DimCustomer
 DimProduct
 DimDate
+
