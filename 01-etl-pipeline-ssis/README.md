@@ -102,6 +102,8 @@ Both feed the same warehouse pipeline.
 
 See screenshots/ for proof of execution.
 
+## Architecture Diagram
+
 ```mermaid
 
 flowchart LR

@@ -63,27 +63,32 @@ Screenshots are available in:
 
     screenshots/ssis/
 
+### Simplified Pipeline View
 
 CSV Files
    |
    v
-+--------+
-|  raw   |  <-- BULK INSERT / SSIS
-+--------+
-     |
-     v
-+--------+
-|  stg   |  (typed + cleaned)
-+--------+
-     |
-     v
-+------------------+
++--------+        BULK INSERT / SSIS
+|  raw   | <---------------------------+
++--------+                             |
+     |                                 |
+     v                                 |
++--------+                             |
+|  stg   |  (typed + cleaned)          |
++--------+                             |
+     |                                 |
+     v                                 |
++----------------------+
 | etl.usp_Run_Pipeline |
-+------------------+
++----------------------+
      |
      v
 +--------+
-|  dw    | --> FactSales
-+--------+     DimCustomer
-               DimProduct
-               DimDate
+|  dw    |
++--------+
+   |   |   |
+   v   v   v
+FactSales
+DimCustomer
+DimProduct
+DimDate
