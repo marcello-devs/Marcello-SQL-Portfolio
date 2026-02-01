@@ -1,0 +1,5 @@
+OrderNaturalKey,OrderDate,CustomerNaturalKey,ProductNaturalKey,Quantity,UnitPrice
+O1001,2025-01-05,C001,P001,1,19.99
+O1002,2025-01-05,C001,P002,2,4.50
+O1003,2025-02-15,C002,P003,1,9.75
+O1004,2025-02-20,C003,P001,1,19.99

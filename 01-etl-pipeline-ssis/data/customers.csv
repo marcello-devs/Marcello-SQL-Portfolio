@@ -1,0 +1,4 @@
+CustomerNaturalKey,FirstName,LastName,Email,Country
+C001,Marcello,Lopes,marcello@example.com,Portugal
+C002,Sofia,Silva,sofia@example.com,UK
+C003,John,Smith,john.smith@example.com,Germany
