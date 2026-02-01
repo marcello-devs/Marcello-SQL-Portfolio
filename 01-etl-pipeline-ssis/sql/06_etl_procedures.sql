@@ -216,62 +216,66 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    DECLARE @runId bigint = NULL;
+    DECLARE @pipelineRunId bigint = NULL;
+    DECLARE @stepRunId     bigint = NULL;
 
     BEGIN TRY
+        -- Pipeline header row (this is the one we will update to SUCCESS/FAILED)
         EXEC etl.usp_LogStep
-            @PipelineName = 'ETL Portfolio Pipeline',
-            @StepName     = 'Pipeline',
-            @Status       = 'STARTED',
-            @ETLRunId     = @runId OUTPUT;
+            @PipelineName='ETL Portfolio Pipeline',
+            @StepName='Pipeline',
+            @Status='STARTED',
+            @ETLRunId=@pipelineRunId OUTPUT;
 
+        -- Step: Load Staging
         EXEC etl.usp_LogStep
-            @PipelineName = 'ETL Portfolio Pipeline',
-            @StepName     = 'Load Staging',
-            @Status       = 'STARTED',
-            @ETLRunId     = @runId OUTPUT;
+            @PipelineName='ETL Portfolio Pipeline',
+            @StepName='Load Staging',
+            @Status='STARTED',
+            @ETLRunId=@stepRunId OUTPUT;
 
         EXEC etl.usp_Load_Staging;
 
         EXEC etl.usp_LogStep
-            @PipelineName = 'ETL Portfolio Pipeline',
-            @StepName     = 'Load Staging',
-            @Status       = 'SUCCESS',
-            @ETLRunId     = @runId OUTPUT;
+            @PipelineName='ETL Portfolio Pipeline',
+            @StepName='Load Staging',
+            @Status='SUCCESS',
+            @ETLRunId=@stepRunId OUTPUT;
 
+        -- Step: Load Warehouse
         EXEC etl.usp_LogStep
-            @PipelineName = 'ETL Portfolio Pipeline',
-            @StepName     = 'Load Warehouse',
-            @Status       = 'STARTED',
-            @ETLRunId     = @runId OUTPUT;
+            @PipelineName='ETL Portfolio Pipeline',
+            @StepName='Load Warehouse',
+            @Status='STARTED',
+            @ETLRunId=@stepRunId OUTPUT;
 
         EXEC etl.usp_Load_Warehouse;
 
         EXEC etl.usp_LogStep
-            @PipelineName = 'ETL Portfolio Pipeline',
-            @StepName     = 'Load Warehouse',
-            @Status       = 'SUCCESS',
-            @ETLRunId     = @runId OUTPUT;
+            @PipelineName='ETL Portfolio Pipeline',
+            @StepName='Load Warehouse',
+            @Status='SUCCESS',
+            @ETLRunId=@stepRunId OUTPUT;
 
+        -- Update pipeline header to SUCCESS
         EXEC etl.usp_LogStep
-            @PipelineName = 'ETL Portfolio Pipeline',
-            @StepName     = 'Pipeline',
-            @Status       = 'SUCCESS',
-            @ETLRunId     = @runId OUTPUT;
+            @PipelineName='ETL Portfolio Pipeline',
+            @StepName='Pipeline',
+            @Status='SUCCESS',
+            @ETLRunId=@pipelineRunId OUTPUT;
     END TRY
     BEGIN CATCH
         DECLARE @msg nvarchar(2048) = ERROR_MESSAGE();
         DECLARE @msg_varchar varchar(4000) = LEFT(CONVERT(varchar(4000), @msg), 4000);
 
-        -- log failure (use variable, no CONVERT inside EXEC)
+        -- Update pipeline header to FAILED
         EXEC etl.usp_LogStep
-            @PipelineName = 'ETL Portfolio Pipeline',
-            @StepName     = 'Pipeline',
-            @Status       = 'FAILED',
-            @Message      = @msg_varchar,
-            @ETLRunId     = @runId OUTPUT;
+            @PipelineName='ETL Portfolio Pipeline',
+            @StepName='Pipeline',
+            @Status='FAILED',
+            @Message=@msg_varchar,
+            @ETLRunId=@pipelineRunId OUTPUT;
 
-        -- explicit re-throw (semicolon before THROW matters in some parsers)
         ;THROW 50000, @msg, 1;
     END CATCH
 END
