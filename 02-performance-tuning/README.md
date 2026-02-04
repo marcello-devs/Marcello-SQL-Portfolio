@@ -32,3 +32,19 @@ Before and after execution plans and statistics are available in the `screenshot
 - Index design
 - Covering indexes
 - IO statistics
+
+## Index Strategy
+
+A nonclustered covering index was created on `OrderDate` and included `CustomerId` and `Amount` to support the reporting query.
+
+This allows SQL Server to satisfy the query entirely from the index without accessing the base table, reducing IO and improving execution time.
+
+Index design was driven directly by execution plan analysis.
+
+## Lessons Learned
+
+- Execution plans are essential for identifying performance bottlenecks such as table scans.
+- Logical reads provide a clearer indicator of query cost than execution time alone.
+- Covering indexes can dramatically improve aggregation queries by eliminating lookups.
+- Indexes should be designed based on real query patterns, not guesswork.
+- Small schema changes can yield significant performance improvements.
