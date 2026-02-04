@@ -16,11 +16,15 @@ A reporting query on a 200k-row table performed a full scan and showed high logi
 
 ## Results
 
-- Clustered index scan replaced by index seek
-- Logical reads significantly reduced
-- Query execution time improved
+After adding a covering index on `OrderDate`:
 
-Screenshots available in screenshots/.
+- Clustered Index Scan was replaced with an Index Seek
+- Logical reads were significantly reduced
+- Query execution time improved noticeably
+
+This demonstrates how targeted indexing based on execution plan analysis can dramatically improve query performance in reporting workloads.
+
+Before and after execution plans and statistics are available in the `screenshots/` folder.
 
 ## Key Concepts Demonstrated
 
