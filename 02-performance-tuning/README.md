@@ -1,22 +1,30 @@
-﻿# Performance Tuning with SQL Server
+﻿# SQL Server Performance Tuning
 
-This project demonstrates identifying and resolving performance issues using execution plans and indexing.
+This project demonstrates identifying and resolving a slow query using execution plans and indexing.
 
-## What it shows
+## Scenario
 
-- Slow query simulation
-- Execution plan analysis
-- Index optimization
-- Before/after performance comparison
+A reporting query on a 200k-row table performed a full scan and showed high logical reads.
 
-## Workflow
+## Steps
 
 1. Generate test data
-2. Run slow query
-3. Capture execution plan
-4. Add indexes
-5. Compare performance
+2. Run slow aggregation query
+3. Capture execution plan (before)
+4. Add covering index
+5. Re-run query and compare
 
-## Outcome
+## Results
 
-Demonstrates practical SQL Server performance tuning techniques commonly used in production systems.
+- Clustered index scan replaced by index seek
+- Logical reads significantly reduced
+- Query execution time improved
+
+Screenshots available in screenshots/.
+
+## Key Concepts Demonstrated
+
+- Execution plan analysis
+- Index design
+- Covering indexes
+- IO statistics
