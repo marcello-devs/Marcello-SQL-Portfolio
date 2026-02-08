@@ -49,3 +49,16 @@ If a customer attribute changes (e.g., name, email, country), the previous recor
 ### Demo
 A sample change + reload workflow is included in:
 - `sql/09_scd2_demo_change.sql`
+
+## SCD Type 2 Demo (Proof)
+
+A controlled change was applied to customer `C001` in the source dimension and the SCD2 load was re-run.
+
+Result:
+- Previous customer record was expired (`IsCurrent = 0`)
+- New record was inserted as current (`IsCurrent = 1`)
+- Validity windows do not overlap
+
+This confirms correct SCD Type 2 behavior.
+
+See proof: `screenshots/scd2_history_C001.png`
