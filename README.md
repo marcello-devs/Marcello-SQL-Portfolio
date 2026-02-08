@@ -1,8 +1,15 @@
 # Marcello SQL & Data Engineering Portfolio
 
-This repository contains hands-on projects demonstrating SQL Server data engineering fundamentals, including ETL pipelines, SSIS orchestration, dimensional modeling, logging, and performance tuning.
+# Marcello SQL Portfolio
 
-Each project is designed to mirror real-world production scenarios.
+This repository showcases practical SQL Server projects focused on data engineering and analytics.
+
+It includes:
+- An end-to-end ETL pipeline using T-SQL and SSIS
+- SQL Server performance tuning with execution plans and indexing
+- A mini data warehouse with dimensional modeling and SCD Type 2
+
+Each project is fully documented with scripts, diagrams, and verification queries.
 
 ---
 
