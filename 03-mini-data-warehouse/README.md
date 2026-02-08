@@ -8,7 +8,7 @@ This project implements a Kimball-style star schema to support analytics reporti
 - `mart3.DimProduct` (Type 1)
 - `mart3.DimDate`
 
-## Why this design?
+## Why this design? (Source data → Dimensions (SCD handling) → Fact table → Analytics queries)
 - Fact table stores measurable events (sales).
 - Dimensions provide descriptive context for slicing/reporting.
 - Customer is modeled as SCD2 to preserve history when attributes change.
@@ -62,3 +62,39 @@ Result:
 This confirms correct SCD Type 2 behavior.
 
 See proof: `screenshots/scd2_history_C001.png`
+
+## Why SCD Type 2 Matters
+
+In analytical systems, historical accuracy is critical.
+
+Without SCD Type 2, reports would show customer attributes (such as country or name) as they are *today*, even when analyzing past transactions. This leads to incorrect historical reporting.
+
+By implementing SCD Type 2:
+- Attribute changes are preserved over time
+- Facts remain historically accurate
+- Analysts can correctly answer questions like:
+  - “What was revenue by country last year?”
+  - “How did customer demographics change over time?”
+
+This project demonstrates SCD Type 2 using effective date ranges, surrogate keys, and a single-current-row strategy.
+
+## Indexing Strategy
+- Clustered primary key on surrogate keys
+- Foreign key indexes to support star-join queries
+
+## Query Performance
+
+Analytics queries were validated using actual execution plans.
+
+- Fact table access uses indexed seeks
+- Joins leverage surrogate keys
+- Aggregations operate on pre-shaped star schema
+
+See execution plan:
+![Execution Plan](screenshots/analytics_execution_plan.png)
+
+## Star Schema
+
+The warehouse follows a Kimball-style star schema optimized for analytical queries.
+
+![Star Schema](screenshots/star_schema.png)

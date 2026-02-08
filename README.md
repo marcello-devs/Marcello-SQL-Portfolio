@@ -69,19 +69,38 @@ Screenshots show clustered index scans replaced by index seeks with reduced logi
 
 ---
 
-## 📁 Project 3 — Mini Data Warehouse
+## 📁 Project 3 — Mini Data Warehouse (Dimensional Modeling)
 
 Location: 03-mini-data-warehouse/
 
-Kimball-style star schema:
-- FactSales
-- DimCustomer
+This project demonstrates a Kimball-style star schema built in SQL Server, focused on analytical querying and dimensional modeling best practices.
+
+### Core model
+
+- FactSales (transaction grain)
+- DimCustomer (SCD Type 2)
 - DimDate
 
-Includes analytical queries:
-- Monthly revenue
-- Top customers
-- YoY comparison
+### What this project demonstrates
+
+- Star schema design for analytics
+- Slowly Changing Dimension (SCD Type 2) implementation
+- Surrogate keys and natural keys
+- Fact-to-dimension relationships
+- Analytical queries on top of the warehouse
+- Query performance validation using execution plans
+
+### Example analytics
+
+- Monthly revenue trends
+- Top customers by revenue
+- Year-over-Year (YoY) comparisons
+
+### Why this matters
+
+This project shows how raw transactional data is transformed into a query-optimized analytical model, suitable for BI tools, reporting, and decision support.
+
+📌 See the project README for schema diagrams, SCD2 examples, and performance screenshots.
 
 ---
 
@@ -110,7 +129,3 @@ Planned extensions include:
 - Data quality checks
 - Azure SQL / cloud deployment
 - Scheduling and automation
-
-
-
-
