@@ -1,7 +1,5 @@
 # Marcello SQL & Data Engineering Portfolio
 
-# Marcello SQL Portfolio
-
 This repository showcases practical SQL Server projects focused on data engineering and analytics.
 
 It includes:
